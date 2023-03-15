@@ -30,7 +30,6 @@ function App({changeRoute}): JSX.Element {
   useEffect(() => {
     /*getHeadline().then((data) => {
       setHeadlines(data);
-      console.log(data);
 
     });*/
     setHeadlines(headline);
@@ -50,7 +49,7 @@ function App({changeRoute}): JSX.Element {
 
         <Header />
         <Slider changeRoute={e => changeRoute(e)} />
-        <Explore/>
+        <Explore changeRoute={e => changeRoute(e)}/>
         <Weather/>
         <HomeNews/>
 

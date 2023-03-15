@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, ScrollView, Image} from 'react-native';
-export default function Explore(): JSX.Element {
-  //businessentertainmentgeneralhealthsciencesportstechnology
+import {View, Text, ScrollView, Image,Pressable} from 'react-native';
+export default function Explore({changeRoute}): JSX.Element {
+
   const [categories, setCategories] = React.useState([
     {
       key: 'business',
@@ -48,15 +48,17 @@ export default function Explore(): JSX.Element {
         <ScrollView horizontal={true}>
           {categories.map((item, index) => {
             return (
-              <View key={index} className="mr-2">
-                <Image
-                  source={item.image}
-                  className="w-[120] h-[120] rounded-full"
-                />
-                <View className="w-[120] h-[120] rounded-full absolute  bg-black/50 flex items-center justify-center">
-                  <Text className="text-white font-[400]" style={{fontSize:17}}>{item.name}</Text>
+              <Pressable onPress={()=>changeRoute(item.key)}>
+                <View key={index} className="mr-2">
+                  <Image
+                    source={item.image}
+                    className="w-[120] h-[120] rounded-full"
+                  />
+                  <View className="w-[120] h-[120] rounded-full absolute  bg-black/50 flex items-center justify-center">
+                    <Text className="text-white font-[400]" style={{fontSize:17}}>{item.name}</Text>
+                  </View>
                 </View>
-              </View>
+              </Pressable>
             );
           })}
         </ScrollView>
