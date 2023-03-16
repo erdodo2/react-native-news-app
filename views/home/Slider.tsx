@@ -1,35 +1,38 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, Pressable, Text, ScrollView,ActivityIndicator} from 'react-native';
+import {
+  View,
+  Image,
+  Pressable,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import moment from 'moment';
 import headline from '../../api/headline.json';
 import Detail from '../Detail';
-import axios from "axios";
+
+import Requests from '../../api/Requests';
 
 export default function Slider({changeRoute}): JSX.Element {
   const [detailVisible, setDetailVisible] = useState(false);
   const [newsDetail, setNewsDetail] = useState({});
-  const api = '077a3bb4ee364d009a29e2b07f3bb210';
-  const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${api}&pageSize=10`;
   const [news, setNews] = useState(headline.articles);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    //getNews();
-    setLoading(false)
+    Requests.headlines().then(res => {
+      setNews(res.data.articles);
+      setLoading(false);
+      console.log(res.data.articles);
+    });
+    setLoading(false);
+
   }, []);
-
-  const getNews = () => {
-    axios.get(url).then((response) => {
-      //setNews(response.data.articles );
-      //setLoading(false)
-    })
-
-  };
 
   return (
     <>
       {loading ? (
-        <View className="h-[200] flex items-center justify-center">
+        <View className="h-[200] bg-slate-100/60 w-full flex items-center justify-center">
           <ActivityIndicator />
         </View>
       ) : (

@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import healineJson from '../../api/headline.json';
 import Detail from "../Detail";
+import Requests from "../../api/Requests";
 
 export default function NewsList({categories}): JSX.Element {
   const [visible, setVisible] = useState(false);
@@ -13,21 +14,22 @@ export default function NewsList({categories}): JSX.Element {
   const [news2, setNews2] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const news = healineJson.articles;
-    news.map(async (item, index) => {
-      if(!item.urlToImage) return;
-      await Image.getSize(item.urlToImage, (width, height) => {
-        const myWidth = 200;
-        item.height = 0;
-        item.height = (height / width) * myWidth;
-      });
-    }, []);
-    setNews1(news.slice(0, news.length / 2));
-    setNews2(news.slice(news.length / 2, news.length));
+    Requests.searchNews(categories).then((res) => {
+      console.log(res.data.articles);
+      const news = res.data.articles;
+      news.map(async (item, index) => {
+        if(!item.urlToImage) return;
+        await Image.getSize(item.urlToImage, (width, height) => {
+          const myWidth = 200;
+          item.height = 0;
+          item.height = (height / width) * myWidth;
+        });
+      }, []);
+      setNews1(news.slice(0, news.length / 2));
+      setNews2(news.slice(news.length / 2, news.length));
+      setLoading(false);
+    })
 
-
-
-    setLoading(false);
   }, []);
 
   const openDetail = (item) => {
@@ -53,7 +55,7 @@ export default function NewsList({categories}): JSX.Element {
                       className="rounded-2xl "
                       style={{
                         width: '100%',
-                        height: item.height,
+                        height: item.height ? item.height : 200,
                       }}
                     />
 
@@ -89,7 +91,7 @@ export default function NewsList({categories}): JSX.Element {
                       className="rounded-2xl "
                       style={{
                         width: '100%',
-                        height: item.height ?? 200,
+                        height: item.height ? item.height : 200,
                       }}
                     />
                     <View className="flex flex-col justify-between my-1">
